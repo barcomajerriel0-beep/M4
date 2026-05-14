@@ -6,17 +6,13 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        UserManager userManager =
-                new UserManager();
+        UserManager userManager = new UserManager();
 
-        AthleteManager athleteManager =
-                new AthleteManager();
+        AthleteManager athleteManager = new AthleteManager();
 
-        TrainingManager trainingManager =
-                new TrainingManager();
+        TrainingManager trainingManager = new TrainingManager();
 
-        PaymentManager paymentManager =
-                new PaymentManager();
+        PaymentManager paymentManager = new PaymentManager();
 
         System.out.println("=================================");
         System.out.println(" SPORTS TRAINING ACADEMY SYSTEM ");
@@ -31,8 +27,7 @@ public class Main {
 
             System.out.print("Choose option: ");
 
-            int choice =
-                    Integer.parseInt(scanner.nextLine());
+            int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
 
@@ -43,8 +38,7 @@ public class Main {
 
                 case 2:
 
-                    User user =
-                            userManager.loginUser(scanner);
+                    User user = userManager.loginUser(scanner);
 
                     if (user != null) {
 
@@ -53,8 +47,7 @@ public class Main {
                                 user,
                                 athleteManager,
                                 trainingManager,
-                                paymentManager
-                        );
+                                paymentManager);
                     }
 
                     break;
@@ -67,8 +60,7 @@ public class Main {
                 default:
 
                     System.out.println(
-                            "Invalid choice!"
-                    );
+                            "Invalid choice!");
             }
         }
     }
@@ -78,8 +70,7 @@ public class Main {
             User user,
             AthleteManager athleteManager,
             TrainingManager trainingManager,
-            PaymentManager paymentManager
-    ) {
+            PaymentManager paymentManager) {
 
         while (true) {
 
@@ -87,13 +78,11 @@ public class Main {
 
             System.out.println(
                     "Logged in as: " +
-                    user.getUsername()
-            );
+                            user.getUsername());
 
             System.out.println(
                     "Role: " +
-                    user.getRole()
-            );
+                            user.getRole());
 
             System.out.println("1. Add Athlete");
             System.out.println("2. Update Athlete");
@@ -107,24 +96,21 @@ public class Main {
 
             System.out.print("Choose option: ");
 
-            int choice =
-                    Integer.parseInt(scanner.nextLine());
+            int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
 
                 case 1:
 
                     if (user.getRole().equalsIgnoreCase(
-                            "Administrator"
-                    )) {
+                            "Administrator")) {
 
                         athleteManager.addAthlete(scanner);
 
                     } else {
 
                         System.out.println(
-                                "Permission denied!"
-                        );
+                                "Permission denied!");
                     }
 
                     break;
@@ -132,16 +118,14 @@ public class Main {
                 case 2:
 
                     if (user.getRole().equalsIgnoreCase(
-                            "Administrator"
-                    )) {
+                            "Administrator")) {
 
                         athleteManager.updateAthlete(scanner);
 
                     } else {
 
                         System.out.println(
-                                "Permission denied!"
-                        );
+                                "Permission denied!");
                     }
 
                     break;
@@ -149,16 +133,14 @@ public class Main {
                 case 3:
 
                     if (user.getRole().equalsIgnoreCase(
-                            "Administrator"
-                    )) {
+                            "Administrator")) {
 
                         athleteManager.deleteAthlete(scanner);
 
                     } else {
 
                         System.out.println(
-                                "Permission denied!"
-                        );
+                                "Permission denied!");
                     }
 
                     break;
@@ -195,8 +177,7 @@ public class Main {
                 default:
 
                     System.out.println(
-                            "Invalid choice!"
-                    );
+                            "Invalid choice!");
             }
         }
     }
