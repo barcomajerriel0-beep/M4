@@ -1,4 +1,4 @@
-public import java.sql.*;
+import java.sql.*;
 
 public class TrainingRepository {
 
@@ -111,6 +111,4 @@ public class TrainingRepository {
             e.printStackTrace();
         }
     }
-} {
-    
 }
