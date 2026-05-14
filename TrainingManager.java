@@ -1,63 +1,114 @@
-import java.util.Scanner;
+import java.sql.*;
 
-public class TrainingManager {
+public class TrainingRepository {
 
-    private TrainingRepository repository =
-            new TrainingRepository();
+    public void saveSession(TrainingSession session) {
 
-    public void scheduleSession(Scanner scanner) {
+        String sql =
+                "INSERT INTO training_sessions " +
+                "(athlete_name, date, time, location, performance, attended) " +
+                "VALUES(?,?,?,?,?,?)";
 
-        System.out.print("Athlete Name: ");
-        String athlete = scanner.nextLine();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        System.out.print("Date: ");
-        String date = scanner.nextLine();
+            stmt.setString(1, session.athleteName);
+            stmt.setString(2, session.date);
+            stmt.setString(3, session.time);
+            stmt.setString(4, session.location);
+            stmt.setString(5, session.performance);
+            stmt.setBoolean(6, session.attended);
 
-        System.out.print("Time: ");
-        String time = scanner.nextLine();
+            stmt.executeUpdate();
 
-        System.out.print("Location: ");
-        String location = scanner.nextLine();
+            System.out.println("Training session saved!");
 
-        TrainingSession session =
-                new TrainingSession(
-                        athlete,
-                        date,
-                        time,
-                        location
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePerformance(
+            String athleteName,
+            String performance,
+            boolean attended
+    ) {
+
+        String sql =
+                "UPDATE training_sessions " +
+                "SET performance=?, attended=? " +
+                "WHERE athlete_name=?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, performance);
+            stmt.setBoolean(2, attended);
+            stmt.setString(3, athleteName);
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Performance updated!");
+            } else {
+                System.out.println("Session not found!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAttendance() {
+
+        String sql =
+                "SELECT athlete_name, attended FROM training_sessions";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                System.out.println(
+                        "Athlete: " +
+                        rs.getString("athlete_name") +
+                        " | Attended: " +
+                        rs.getBoolean("attended")
                 );
+            }
 
-        repository.saveSession(session);
-
-        System.out.println("Training session scheduled!");
-    }
-
-    public void recordPerformance(Scanner scanner) {
-
-        System.out.print("Athlete Name: ");
-        String athlete = scanner.nextLine();
-
-        System.out.print("Performance result: ");
-        String performance = scanner.nextLine();
-
-        System.out.print("Attended? (true/false): ");
-        boolean attended =
-                Boolean.parseBoolean(scanner.nextLine());
-
-        repository.updatePerformance(
-                athlete,
-                performance,
-                attended
-        );
-    }
-
-    public void monitorAttendance() {
-
-        repository.showAttendance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void generateReport() {
 
-        repository.generateReport();
+        String sql = "SELECT * FROM training_sessions";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println("\n===== TRAINING REPORT =====");
+
+            while (rs.next()) {
+
+                System.out.println(
+                        "Athlete: " +
+                        rs.getString("athlete_name") +
+                        " | Date: " +
+                        rs.getString("date") +
+                        " | Performance: " +
+                        rs.getString("performance") +
+                        " | Attended: " +
+                        rs.getBoolean("attended")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
